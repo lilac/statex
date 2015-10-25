@@ -1,0 +1,6 @@
+[submodule "react-native-statex"]
+	path = react-native-statex
+	url = https://github.com/lilac/react-native-statex.git
+[submodule "statex-demo"]
+	path = statex-demo
+	url = https://github.com/lilac/statex-demo.git
