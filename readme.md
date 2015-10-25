@@ -8,7 +8,7 @@ Attempts were made to relieve this problem. These solutions can be divided into 
 2. Wrap native runtimes in a cross platform virtual machine or environment, e.g Xamarin, and RoboVM.
 3. Create tools to translate code written for one platform to another platform, like j2objc.
 
-However, most of these solutions also introduce new problems.
+However, most of these solutions have their own limitations or problems. A detailed survey of these approaches is accessible in a [blog series](http://www.skyscanner.net/blogs/developing-mobile-cross-platform-library-part-1-exploring).
 
 ### Every program is a state machine
 This project tries to solve this problem using another approach. It applies a new architecture to enable reusing logic related code across platforms. This architecture is depicted in the following image.
@@ -24,9 +24,13 @@ It is motivated by the fact that every program is a state machine. The state mac
 
 3. The **view** is *dump* but *reactive*. It must not contains any logic, it just monitors state, and render UI based on the state. When users interact with the view, it instantly sends predefined actions to the state machine. The view for each platform is written in its native language, leading to native user experience.
 
-4. The **Backend** could be a remote server or local worker queues for long running tasks. It talks to **state machine** by asynchronous events.
+4. The **Backend** could be a remote server or local worker queues for long running tasks. It talks to **state machine** by asynchronous events. Local running tasks are written in C/C++ as both android and iOS support it. In addition, they should be network transparent, such that state machines are agnostic about where the tasks are executed. This allow us to execute some tasks in mobile devices, and some in remote servers.
 
 As you can see, the data flow of the whole application is unidirectional, inspired by the Flux architecture.
+
+### Benefit
+- Deterministic states: all application states including view states are contained in a single store.
+- Easy unit test and integration test: all business and view logic can be tested by supplying actions and events, without any touch of the view.
 
 ### Demo
 To prove the above mentioned architecture works, a proof of concept application is developed. It is a simple counter with two buttons to increment and decrement the count. Currently there is only an android app of it, but we plan to develop iOS and web versions of it.
@@ -34,11 +38,13 @@ To prove the above mentioned architecture works, a proof of concept application 
 Note that the demo application depends on react native, which may confuse you. Actually react native is used as the javascript engine to implement the **state machine**. In addition, a react native module is created to implement the **state** (a simple key value store). React native is utilized to quickly prove the feasibility of this new architecture.
 
 ### Roadmap
-- [x] Develop a proof of concept
-- [x] Explain the architecture and request feedback from the community
+- [x] Develop a proof of concept, and explain the architecture
+- [ ] Collect feedback from the community
 - [ ] Implement a cross platform javascript runtime
 - [ ] Implement a unified data store for **state**
 - [ ] Optionally add a C/C++ framework for backend tasks
+
+Although this project is still in early stage, contribution is highly welcome.
 
 ### Notes
 - The javascript runtime should be compatible to that in modern browsers, such that a **state machine** module can run cross platforms. *React native* is a good start for it.
