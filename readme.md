@@ -14,11 +14,10 @@ However, most of these solutions have their own limitations or problems. A detai
 This project tries to solve this problem using another approach. It applies a new architecture to enable reusing logic related code across platforms. This architecture is depicted in the following image.
 
 ![Image of architecture](doc/statex.jpg)
-(https://www.gliffy.com/go/publish/image/9255225/L.png)
 
 It is motivated by the fact that every program is a state machine. The state machine is induced by business logic and view logic of an application.
 
-1. As the *core* of an application, the **state machine** transform (mutate) states upon receiving user's actions from the front-end views, or events from the backend. In general, it is a set of handlers for each action and event. Javascript is chosen as the language to implement state machines, as it is good at event handling, and can be run on different platforms. Due to the purity of a state machine, we are able to reuse it everywhere.
+1. As the *core* of an application, the **state machine** transforms (mutates) states upon receiving user's actions from the front-end views, or events from the backend. In general, it is a set of handlers for each action and event. Javascript is chosen as the language to implement state machines, as it is good at event handling, and can be run on different platforms. Due to the purity of a state machine, we are able to reuse it everywhere.
 
 2. The **state** of an application is a data store that contains all of its information and status, including temporary data for views. Regardless of its underlying database, it exposes data access interface similar to a hierarchical key-value store. All keys form a tree, which reflect their relations. A key is like a path of file systems, and have a parent or multiple children keys. Whenever a value is changed by the state machine, it sends a notification with its key to the view.
 
@@ -33,9 +32,10 @@ As you can see, the data flow of the whole application is unidirectional, inspir
 - Easy unit test and integration test: all business and view logic can be tested by supplying actions and events, without any touch of the view.
 
 ### Demo
-To prove the above mentioned architecture works, a proof of concept application is developed. It is a simple counter with two buttons to increment and decrement the count. Currently there is only an android app of it, but we plan to develop iOS and web versions of it.
+To prove the above mentioned architecture works, a proof of concept application is developed. It is a simple counter consisting of a label, and two buttons to increment or decrement the count.
+The demo project resides in [statex-demo](https://github.com/lilac/statex-demo), and includes an Android and iOS application.
 
-Note that the demo application depends on react native, which may confuse you. Actually react native is used as the javascript engine to implement the **state machine**. In addition, a react native module is created to implement the **state** (a simple key value store). React native is utilized to quickly prove the feasibility of this new architecture.
+Note that the demo application depends on react native, which may confuse you. Actually react native is used as the javascript engine to implement the **state machine** at the moment. In addition, a react native module is created to implement the **state** (a simple key value store). React native is utilized to quickly prove the feasibility of this new architecture.
 
 ### Roadmap
 - [x] Develop a proof of concept, and explain the architecture
@@ -48,4 +48,4 @@ Although this project is still in early stage, contribution is highly welcome.
 
 ### Notes
 - The javascript runtime should be compatible to that in modern browsers, such that a **state machine** module can run cross platforms. *React native* is a good start for it.
-- The data store for **state** should be compatible to IndexedDB, so that they are accessible when running in browsers. Good candidates of it are *LevelDB* and *RocksDB*.
+- The data store engine for **state** is preferably compatible to IndexedDB, so that they are accessible when running in browsers. Good candidates of it are *LevelDB* and *RocksDB*.
